@@ -1,70 +1,26 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore } from 'redux';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
+// import { ConnectedRouter } from 'react-router-redux';
+// import { createBrowserHistory } from 'history';
+import TodoApp from './containers/TodoApp';
+import Error from './components/Error';
+import createStore from './store';
 
-const initialState = {
-    task: '',
-    tasks: []
-};
+// Storeの生成
+const store = createStore();
 
-function tasksReducer( state = initialState, action ) {
-    switch (action.type) {
-        case 'INPUT_TASK':
-            return {
-                ...state,
-                task: action.payload.task
-            };
-        case 'ADD_TASK':
-            return {
-                ...state,
-                tasks: state.tasks.concat([action.payload.task])
-            }
-        default:
-            return state;
-    }
-}
+render(
+    <Provider store={store}>
+        <Router>
+            <div>
+                {/* ルーティングさせる */}
+                <Route exact path="/" component={TodoApp} />
+                <Route exact path="/error" component={Error} />
+            </div>
+        </Router>
+    </Provider>,
+    document.getElementById('root')
+);
 
-const store = createStore( tasksReducer );
-
-const inputTask = task => ({
-    type: 'INPUT_TASK',
-    payload: {
-        task
-    }
-});
-
-const addTask = task => ({
-    type: 'ADD_TASK',
-    payload: {
-        task
-    }
-});
-
-function TodoApp({ store }) {
-    const { task, tasks } = store.getState();
-
-    return (
-        <div>
-            <input type="text" onChange={e => store.dispatch(inputTask(e.target.value))} />
-            <input type="button" value="add" onClick={() => store.dispatch(addTask(task))} />
-
-            <ul>
-                {
-                    tasks.map((item, i) => (
-                        <li key={i}>{item}</li>
-                    ))
-                }
-            </ul>
-        </div>
-    )
-}
-
-function renderApp(store) {
-    render(
-        <TodoApp store={store} />,
-        document.getElementById('root')
-    )
-}
-
-store.subscribe(() => renderApp(store));
-renderApp(store);
