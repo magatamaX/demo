@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function TodoApp({ task, tasks, inputTask, addTask, redirectToError }) {
+function TodoApp({ task, tasks, inputTask, addTask, deleteTask, redirectToError }) {
     return (
         <div>
             <input type="text" onChange={e => inputTask(e.target.value)} />
@@ -9,7 +9,10 @@ function TodoApp({ task, tasks, inputTask, addTask, redirectToError }) {
             <ul>
                 {
                     tasks.map((item, i) => (
-                        <li key={i}>{item}</li>
+                        <li key={i}>
+                            {item}
+                            <button onClick={() => deleteTask(i)}>削除</button>
+                        </li>
                     ))
                 }
             </ul>

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import TodoApp from '../components/TodoApp';
-import { inputTask, addTask } from '../actions/tasks';
+import { inputTask, addTask, deleteTask } from '../actions/tasks';
 
 function mapStateToProps({ tasks }) {
     return {
@@ -16,6 +16,9 @@ function mapDispatchToProps(dispatch) {
         },
         inputTask(task) {
             dispatch(inputTask(task));
+        },
+        deleteTask(index) {
+            dispatch(deleteTask(index));
         }
     };
 }
